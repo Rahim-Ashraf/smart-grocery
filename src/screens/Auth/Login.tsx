@@ -1,3 +1,5 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 import { jwtDecode } from 'jwt-decode';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form'
@@ -13,6 +15,7 @@ interface User {
 }
 
 const Login = () => {
+  const navigation = useNavigation()
   const [data, setData] = useState<User>()
   const [loginErr, setLoginErr] = useState("")
   const { control, handleSubmit, formState: { errors } } = useForm();
@@ -28,8 +31,10 @@ const Login = () => {
       });
       const token = await response.json();
       if (token.token) {
+        await AsyncStorage.setItem('authToken', token.token)
         const data: User = jwtDecode(token.token)
         setData(data);
+        navigation.navigate("Home")
       }
       else {
         setLoginErr("Please type valid Email and Password")
@@ -39,7 +44,6 @@ const Login = () => {
       console.error('Error fetching data:', error);
     }
   }
-  console.log(data);
 
   return (
     <ScrollView>
