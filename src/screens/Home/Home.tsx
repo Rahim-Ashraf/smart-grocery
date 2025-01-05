@@ -44,7 +44,7 @@ const style = StyleSheet.create({
         fontSize: 30,
     },
     user: {
-        fontSize: 20,
+        fontSize: 25,
         color: 'pink',
     }
 })
